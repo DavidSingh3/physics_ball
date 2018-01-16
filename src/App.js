@@ -1,24 +1,18 @@
-import React, { Component } from 'react';
-import './styles/App.css';
-import Maze from './components/Maze.js'
+import React, { Component } from 'react'
+import './styles/App.css'
 import Ball from './components/Ball.js'
-import simulate from './utilities/simulate.js'
 
 class App extends Component {
-  componentDidMount() {
-    simulate()
-  }
 
-  render() {
+  render () {
     return (
       <div className="App">
         <div>
-          <Maze />
-          <Ball />
+          <Ball ref="ball" />
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
