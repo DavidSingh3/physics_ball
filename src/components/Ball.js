@@ -12,7 +12,15 @@ class Ball extends Component {
     super()
 
     const engine = Engine.create()
-    engine.world.gravity.y = 0;
+    engine.world.gravity.y = 0
+
+    // Matter.World.create({
+    //   bounds: {
+    //     min: {x: 100, y: 100},
+    //     max: {x: this.viewport().width, y: this.viewport().height}
+    //   }
+    // })
+
     const render = Render.create({
       element: document.body,
       engine: engine,
@@ -23,10 +31,23 @@ class Ball extends Component {
       }
     })
 
-    const ball = Bodies.circle(this.viewport().width/2, this.viewport().height/2, 20, 10)
-    const ground = Bodies.rectangle(400, 380, 810, 60, {isStatic: true})
+    // walls
+    const wallWidth = 10
+    const wallN = Bodies.rectangle(this.viewport().width / 2, 0, this.viewport().width, wallWidth, {isStatic: true})
+    const wallS = Bodies.rectangle(this.viewport().width / 2, this.viewport().height, this.viewport().width, wallWidth, {isStatic: true})
+    const wallW = Bodies.rectangle(0, this.viewport().height / 2, wallWidth, this.viewport().height, {isStatic: true})
+    const wallE = Bodies.rectangle(this.viewport().width, this.viewport().height / 2, wallWidth, this.viewport().height, {isStatic: true})
+    World.add(engine.world, [wallN, wallS, wallW, wallE])
 
-    World.add(engine.world, [ball])
+    // objects
+    const ramp = Bodies.rectangle(this.viewport().width / 2, this.viewport().height / 2 + 230, 810, 90, {
+      isStatic: true,
+      angle: -(Math.PI / 4) /*45 degrees in radians in terms of PI*/
+    })
+    const ball = Bodies.circle(this.viewport().width / 2, this.viewport().height / 2, 20, 10)
+    Matter.Body.applyForce(ball, {x: 0, y: 0}, {x: 0.04, y: 0})
+
+    World.add(engine.world, [ball, ramp, wallN, wallS, wallW, wallE])
 
     Engine.run(engine)
     Render.run(render)
