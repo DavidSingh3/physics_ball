@@ -8,30 +8,28 @@ const Bodies = Matter.Bodies
 
 class Ball extends Component {
 
-
-
-  engine = Engine.create()
-  render = Render.create({
-    element: document.body,
-    engine: this.engine,
-    options: {
-      width: 500, //this.viewport().width,
-      height: 2000, //this.viewport().height,
-      wireframes: false
-    }
-  })
-
-
   constructor () {
     super()
 
-    const ball = Bodies.circle(30, 30, 20, 10)
+    const engine = Engine.create()
+    engine.world.gravity.y = 0;
+    const render = Render.create({
+      element: document.body,
+      engine: engine,
+      options: {
+        width: this.viewport().width,
+        height: this.viewport().height,
+        wireframes: false
+      }
+    })
+
+    const ball = Bodies.circle(this.viewport().width/2, this.viewport().height/2, 20, 10)
     const ground = Bodies.rectangle(400, 380, 810, 60, {isStatic: true})
 
-    World.add(this.engine.world, [ball])
+    World.add(engine.world, [ball])
 
-    Engine.run(this.engine)
-    Render.run(this.render)
+    Engine.run(engine)
+    Render.run(render)
 
     this.state = {
       left: 0,
