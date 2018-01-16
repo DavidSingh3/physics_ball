@@ -1,6 +1,10 @@
 import CANNON from 'cannon' //lightweight physics engine module
+import store from '../redux/store.js'
+import {setBallPosition} from '../redux/worldObjects/actions'
 
 const simulate = () => {
+
+
 // Setup our world
   const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, 0, -9.82) // m/s²
@@ -34,7 +38,11 @@ const simulate = () => {
       const dt = (time - lastTime) / 1000
       world.step(fixedTimeStep, dt, maxSubSteps)
     }
-    console.log('Sphere z position: ' + sphereBody.position.z)
+
+
+
+
+
     lastTime = time
   })()
 }

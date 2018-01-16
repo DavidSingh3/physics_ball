@@ -1,5 +1,21 @@
 #viewport {
-    width: 500px;
-    height: 500px;
-    background-color: black;
+    border: 1px solid black;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+body, .app {
+    margin: 0;
+    padding: 0;
+}
+
+.app > div {
+    position: relative;
+}
+
+svg {
+    position: absolute;
+    left: 0;
+    top: 0;
 }

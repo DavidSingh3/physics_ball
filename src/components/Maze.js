@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+class Maze extends Component {
 
-const Maze = props => {
-
-  return (
-    null
-  )
+  render () {
+    return (
+      <canvas id="viewport" ref="viewport" />
+    )
+  }
 
 }
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    ballPosition: state.worldObjects.ballPosition
+  }
 }
 
 const mapDispatchToProps = dispatch => {
