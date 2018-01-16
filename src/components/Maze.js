@@ -1,28 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+
 const Maze = props => {
 
-  return(
+  return (
     null
   )
 
 }
 
 const mapStateToProps = state => {
-  return {
-  }
+  return {}
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onChangeCurrentSensor: sensor => {
-      dispatch(setCurrentSensor(sensor))
-    },
-    onSetMapCoords: coords => {
-      dispatch(setMapCoords(coords))
-    }
-  }
+  return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoTable)
+export default connect(mapStateToProps, mapDispatchToProps)(Maze)
