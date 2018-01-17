@@ -1,5 +1,3 @@
-// https://github.com/progers/pathseg
-
 // SVGPathSeg API polyfill
 // https://github.com/progers/pathseg
 //
