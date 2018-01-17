@@ -5,11 +5,48 @@ const Engine = Matter.Engine
 const Render = Matter.Render
 const World = Matter.World
 const Bodies = Matter.Bodies
+const Mouse = Matter.Mouse
+const MouseConstraint = Matter.MouseConstraint
+const Runner = Matter.Runner
 
 class Ball extends Component {
 
   constructor () {
     super()
+
+    this.state = {
+      tiltLR: 0,
+      tiltFB: 0
+    }
+
+
+    // this.deviceOrientationHandler = this.deviceOrientationHandler.bind(this)
+  }
+
+  viewport = () => {
+    let e = window
+    let a = 'inner'
+    if (!('innerWidth' in window)) {
+      a = 'client'
+      e = document.documentElement || document.body
+    }
+    return {width: e[a + 'Width'], height: e[a + 'Height']}
+  }
+
+  deviceOrientationHandler = (e) => {
+    const offsetLR = 1.5
+    const offsetFB = 21
+    const tiltLR = e.gamma - offsetLR // left-right
+    const tiltFB = e.beta - offsetFB // up-down
+
+    this.setState({
+      tiltLR,
+      tiltFB
+    })
+  }
+
+  componentDidMount () {
+    window.addEventListener('deviceorientation', this.deviceOrientationHandler, true)
 
     const engine = Engine.create()
     engine.world.gravity.y = 0
@@ -31,6 +68,18 @@ class Ball extends Component {
       }
     })
 
+    // // add mouse control
+    // const mouse = Mouse.create(render.canvas)
+    // const mouseConstraint = MouseConstraint.create(engine, {
+    //   mouse: mouse,
+    //   constraint: {
+    //     stiffness: 0.2,
+    //     render: {
+    //       visible: false
+    //     }
+    //   }
+    // })
+
     // walls
     const wallWidth = 10
     const wallN = Bodies.rectangle(this.viewport().width / 2, 0, this.viewport().width, wallWidth, {isStatic: true})
@@ -45,56 +94,24 @@ class Ball extends Component {
       angle: -(Math.PI / 4) /*45 degrees in radians in terms of PI*/
     })
     const ball = Bodies.circle(this.viewport().width / 2, this.viewport().height / 2, 20, 10)
-    Matter.Body.applyForce(ball, {x: 0, y: 0}, {x: 0.04, y: 0})
 
     World.add(engine.world, [ball, ramp, wallN, wallS, wallW, wallE])
 
-    Engine.run(engine)
+    // Engine.run(engine)
+
+    const run = () => {
+      window.requestAnimationFrame(run)
+      const LR = this.state.tiltLR / 10
+      const FB = this.state.tiltFB / 10
+      console.log(LR, FB)
+      Matter.Body.setVelocity(ball, {x: LR, y: FB})
+      Engine.update(engine, 1000 / 60)
+    }
+
+    run()
+
     Render.run(render)
 
-    this.state = {
-      left: 0,
-      top: 0,
-      tiltLR: 0,
-      tiltFB: 0
-    }
-    // this.deviceOrientationHandler = this.deviceOrientationHandler.bind(this)
-  }
-
-  viewport = () => {
-    let e = window
-    let a = 'inner'
-    if (!('innerWidth' in window)) {
-      a = 'client'
-      e = document.documentElement || document.body
-    }
-    return {width: e[a + 'Width'], height: e[a + 'Height']}
-  }
-
-  deviceOrientationHandler = (e) => {
-    const tiltLR = e.gamma - 1.5 // left-right
-    const tiltFB = e.beta - 21 // up-down
-
-    const viewport = this.viewport()
-
-    let left = this.state.left + tiltLR
-    left = Math.max(left, 0)
-    left = Math.min(left, viewport.width - 25)
-
-    let top = this.state.top + tiltFB
-    top = Math.max(top, 0)
-    top = Math.min(top, viewport.height - 25)
-
-    this.setState({
-      left,
-      top,
-      tiltLR,
-      tiltFB
-    })
-  }
-
-  componentDidMount () {
-    window.addEventListener('deviceorientation', this.deviceOrientationHandler, true)
   }
 
   render () {
